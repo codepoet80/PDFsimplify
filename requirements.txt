@@ -1,0 +1,35 @@
+# pdfsimplify dependencies
+#
+# Needs Python >= 3.10 (pymupdf and pillow both require it; reportlab allows 3.9).
+# Tested on Python 3.14.6, macOS arm64.
+#
+#   python3 -m venv venv
+#   ./venv/bin/pip install -r requirements.txt
+#   ./venv/bin/python pdfsimplify.py --version
+#
+# To run it as a command, point the script's shebang at that venv's python and
+# symlink it onto your PATH:
+#
+#   sed -i '' "1s|.*|#!$PWD/venv/bin/python3|" pdfsimplify.py
+#   chmod +x pdfsimplify.py && ln -sf "$PWD/pdfsimplify.py" ~/.local/bin/pdfsimplify
+
+# Reads the source PDF: text with per-glyph geometry, embedded images, vector
+# drawings, content streams, and the final rewrite/garbage-collect pass.
+pymupdf==1.28.2
+
+# Builds the output PDF (platypus flowables, base-14 fonts, tables, bookmarks).
+reportlab==5.0.1
+
+# Re-encodes figures: RGB conversion, ICC stripping, palette quantisation, resizing.
+# Also pulled in by reportlab, but imported directly, so pinned here in its own right.
+pillow==12.3.0
+
+# Transitive, via reportlab. Pinned only so the environment reproduces exactly;
+# drop this line if you would rather let pip resolve it.
+charset-normalizer==3.5.1
+
+# Optional, not a Python package: qpdf, used to linearise the output so an old
+# reader can show page 1 without parsing the whole file. If it is missing the
+# tool says so and carries on, and the PDF is still valid.
+#   macOS:  brew install qpdf
+#   Debian: apt install qpdf
